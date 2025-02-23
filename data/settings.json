@@ -5,54 +5,5 @@
     "child": 5,
     "underFive": 0
   },
-  "aboutContent": {
-    "missionStatement": "To foster community spirit by sharing wholesome, homemade dishes made from organic and natural ingredients.",
-    "foodStandards": {
-      "title": "Food Standards",
-      "subtitle": "Organic and Natural Ingredients",
-      "items": [
-        "All dishes should be made primarily with organic and/or naturally grown produce and meats (if applicable).",
-        "Avoid processed items containing artificial flavors, colors, or preservatives.",
-        "When possible, source from local farms or community gardens.",
-        "Each person should bring a dish that can serve about 6–8 people."
-      ]
-    },
-    "participationRequirements": {
-      "title": "Participation Requirements",
-      "sections": [
-        {
-          "title": "Cooking or Donation Requirement",
-          "items": [
-            "Every local participant must do at least one of the following each time they attend:",
-            "- Bring a fully prepared dish that meets the event's food standards.",
-            "- Contribute a monetary donation (suggested minimum: $5 for children above 7 and $10 for 13+)",
-            "- Volunteer for setup and cleanup.",
-            "Attendance is contingent on fulfilling at least one role: cooking, donating, or volunteering."
-          ]
-        },
-        {
-          "title": "Travelers and Guests",
-          "items": [
-            "Anyone visiting from out of town or a first-time local guest may attend one meal for free per year, no obligations.",
-            "If they wish to attend more frequently, they must abide by the same participation rules as regular attendees."
-          ]
-        },
-        {
-          "title": "Consistent Attendance without Participation Policy",
-          "items": [
-            "If a regular attendee comes multiple times without bringing a dish or donating, event organizers may politely remind them of these rules.",
-            "Continued non-participation will result in losing the privilege to attend future potlucks."
-          ]
-        }
-      ]
-    },
-    "volunteerRole": {
-      "title": "The Volunteer Role",
-      "items": [
-        "Volunteer to arrive 30 minutes early to arrange tables, put out utensils, and help anyone who needs carrying food, etc.",
-        "Arrange dishes and supplies on tables according to the order someone would select them.",
-        "Afterwards clean up all tables, throw away trash, and clean all tables."
-      ]
-    }
-  }
+  "aboutContent": ""
 }
