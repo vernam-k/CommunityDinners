@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4a90e2">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Community Dinners</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav>
+        <h1>Community Dinners</h1>
+        <div class="nav-links">
+            <a href="index.html" class="active">Current Dinner</a>
+            <a href="next-week.html">Next Week</a>
+            <a href="previous-dinners.html">Previous Dinners</a>
+            <a href="admin.html">Admin</a>
+            <a href="about.html">About</a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="dinner-details">
+            <h2>This Saturday's Dinner - <span id="dinnerDate"></span></h2>
+            
+            <div class="editable-section">
+                <h3>Theme, Location, and Volunteers</h3>
+                <div class="edit-field" id="themeLocation" contenteditable="true" role="textbox" aria-label="Theme, location, and volunteers">
+                    Click to add theme, location, and volunteer information...
+                </div>
+            </div>
+
+            <div class="dishes-section">
+                <h3>Dishes & Supplies</h3>
+                <div class="dishes-list">
+                    <div class="dish-category">
+                        <h4>Main Dishes</h4>
+                        <ul id="mainDishes" aria-label="Main dishes list"></ul>
+                        <button onclick="addItem('mainDishes')" aria-label="Add main dish">+ Add Main Dish</button>
+                    </div>
+                    <div class="dish-category">
+                        <h4>Sides & Appetizers</h4>
+                        <ul id="sides" aria-label="Sides and appetizers list"></ul>
+                        <button onclick="addItem('sides')" aria-label="Add side dish">+ Add Side/Appetizer</button>
+                    </div>
+                    <div class="dish-category">
+                        <h4>Supplies</h4>
+                        <ul id="supplies" aria-label="Supplies list"></ul>
+                        <button onclick="addItem('supplies')" aria-label="Add supply item">+ Add Supply Item</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="notes-section">
+                <h3>Notes & Announcements</h3>
+                <div class="edit-field" id="notes" contenteditable="true" role="textbox" aria-label="Notes and announcements">
+                    Click to add notes (dietary restrictions, announcements, etc.)...
+                </div>
+            </div>
+
+            <div class="rsvp-section">
+                <h3>RSVP</h3>
+                <div class="price-calculator">
+                    <h4>Calculate Recommended Donation</h4>
+                    <div class="age-group">
+                        <label for="adultsCount">Adults (18+):</label>
+                        <input type="number" min="0" id="adultsCount" value="0" aria-label="Number of adults">
+                    </div>
+                    <div class="age-group">
+                        <label for="teens">Age 13-17:</label>
+                        <input type="number" min="0" id="teens" value="0" aria-label="Number of teens">
+                    </div>
+                    <div class="age-group">
+                        <label for="children">Age 5-12:</label>
+                        <input type="number" min="0" id="children" value="0" aria-label="Number of children">
+                    </div>
+                    <div class="age-group">
+                        <label for="underFive">Under 5:</label>
+                        <input type="number" min="0" id="underFive" value="0" aria-label="Number of children under 5">
+                    </div>
+                    <div class="total">
+                        <strong>Total Recommended Donation: $<span id="totalDonation">0</span></strong>
+                    </div>
+                    <button onclick="addRSVP()" aria-label="Add RSVP">Add RSVP</button>
+                </div>
+                <div class="rsvp-list" id="rsvpList" aria-label="RSVP list"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

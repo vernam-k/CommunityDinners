@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4a90e2">
+    <title>Previous Dinners - Community Dinners</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .archived-dinner {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .archived-dinner h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .archived-dinner .stats {
+            background: var(--secondary-color);
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .archived-dinner .dishes-brought {
+            margin: 1rem 0;
+        }
+
+        .archived-dinner .dishes-brought ul {
+            list-style: none;
+            margin: 0.5rem 0;
+            padding: 0;
+        }
+
+        .archived-dinner .dishes-brought li {
+            padding: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .archived-dinner .notes-section {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .archived-dinner .comments {
+            margin-top: 1rem;
+        }
+
+        .comment-form {
+            margin-top: 1rem;
+        }
+
+        .comment-form textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            min-height: 80px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .archived-dinner {
+                background: #2d2d2d;
+                color: #ffffff;
+            }
+
+            .archived-dinner .stats {
+                background: #333;
+            }
+
+            .archived-dinner .dishes-brought li {
+                border-bottom-color: #444;
+            }
+
+            .comment-form textarea {
+                background: #333;
+                border-color: #444;
+                color: #ffffff;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .archived-dinner {
+                margin: 1rem;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <h1>Community Dinners</h1>
+        <div class="nav-links">
+            <a href="index.html">Current Dinner</a>
+            <a href="next-week.html">Next Week</a>
+            <a href="previous-dinners.html" class="active">Previous Dinners</a>
+            <a href="admin.html">Admin</a>
+            <a href="about.html">About</a>
+        </div>
+    </nav>
+
+    <main>
+        <div id="archivedDinners">
+            <!-- Archived dinners will be loaded here -->
+        </div>
+    </main>
+
+    <script>
+        // Format date consistently
+        function formatDinnerDate(dateString) {
+            const date = new Date(dateString);
+            const month = date.toLocaleString('en-US', { month: 'long' });
+            const day = date.getDate();
+            const year = date.getFullYear();
+            return `Saturday, ${month} ${day}, ${year}`;
+        }
+
+        // Calculate total attendees
+        function calculateTotalAttendees(rsvps) {
+            return rsvps.reduce((total, rsvp) => {
+                return total + rsvp.adults + rsvp.teens + rsvp.children + rsvp.underFive;
+            }, 0);
+        }
+
+        // Calculate total donations
+        function calculateTotalDonations(rsvps) {
+            return rsvps.reduce((total, rsvp) => total + rsvp.donation, 0);
+        }
+
+        // Load and display archived dinners
+        async function loadArchivedDinners() {
+            try {
+                const response = await fetch('api.php?action=get_archived');
+                const archivedDinners = await response.json();
+                const container = document.getElementById('archivedDinners');
+                
+                if (archivedDinners.length === 0) {
+                    container.innerHTML = '<p>No archived dinners yet.</p>';
+                    return;
+                }
+
+                container.innerHTML = archivedDinners.map(dinner => `
+                    <div class="archived-dinner">
+                        <h3>${formatDinnerDate(dinner.date)}</h3>
+                        <p><strong>Theme & Location:</strong> ${dinner.theme || 'Not specified'}</p>
+                        
+                        <div class="stats">
+                            <h4>Dinner Statistics</h4>
+                            <p>Total Attendees: ${calculateTotalAttendees(dinner.rsvps)}</p>
+                            <p>Total Donations: $${calculateTotalDonations(dinner.rsvps)}</p>
+                        </div>
+
+                        <div class="dishes-brought">
+                            <h4>Dishes & Supplies Brought:</h4>
+                            <ul>
+                                ${dinner.dishes.mainDishes.map(dish => `
+                                    <li>${dish.name} (brought by ${dish.bringer})</li>
+                                `).join('')}
+                                ${dinner.dishes.sides.map(dish => `
+                                    <li>${dish.name} (brought by ${dish.bringer})</li>
+                                `).join('')}
+                                ${dinner.dishes.supplies.map(supply => `
+                                    <li>${supply.name} (brought by ${supply.bringer})</li>
+                                `).join('')}
+                            </ul>
+                        </div>
+
+                        <div class="notes-section">
+                            <h4>Notes:</h4>
+                            <p>${dinner.notes || 'No notes recorded'}</p>
+                        </div>
+
+                        <div class="comments">
+                            <h4>Comments:</h4>
+                            ${dinner.comments ? dinner.comments.map(comment => `
+                                <div class="comment">
+                                    <p>${comment.text}</p>
+                                    <small>- ${comment.author}</small>
+                                </div>
+                            `).join('') : '<p>No comments yet.</p>'}
+                            
+                            <div class="comment-form">
+                                <textarea placeholder="Add a comment (e.g., 'Thank you, the lamb stew was amazing!')" 
+                                          onkeyup="this.value = this.value.substring(0, 500)"></textarea>
+                                <button onclick="addComment('${dinner.date}', this.previousElementSibling)">Add Comment</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                console.error('Failed to load archived dinners:', error);
+                document.getElementById('archivedDinners').innerHTML = 
+                    '<p>Failed to load archived dinners. Please try again later.</p>';
+            }
+        }
+
+        // Add a comment to an archived dinner
+        async function addComment(dinnerDate, textarea) {
+            const comment = textarea.value.trim();
+            if (!comment) return;
+
+            const author = prompt('Please enter your name:');
+            if (!author) return;
+
+            try {
+                const response = await fetch('api.php?action=get_archived');
+                const archivedDinners = await response.json();
+                
+                const dinnerIndex = archivedDinners.findIndex(d => d.date === dinnerDate);
+                if (dinnerIndex === -1) return;
+
+                if (!archivedDinners[dinnerIndex].comments) {
+                    archivedDinners[dinnerIndex].comments = [];
+                }
+
+                archivedDinners[dinnerIndex].comments.push({
+                    text: comment,
+                    author: author,
+                    date: new Date().toISOString()
+                });
+
+                await fetch('api.php?action=update_archived', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(archivedDinners)
+                });
+
+                textarea.value = '';
+                loadArchivedDinners(); // Refresh the display
+
+            } catch (error) {
+                console.error('Failed to add comment:', error);
+                alert('Failed to add comment. Please try again.');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadArchivedDinners);
+    </script>
+</body>
+</html>

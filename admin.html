@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4a90e2">
+    <title>Admin - Community Dinners</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .price-settings {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+        
+        .price-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .price-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .price-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .archive-settings {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        @media (max-width: 768px) {
+            .price-settings {
+                margin: 1rem;
+                padding: 1rem;
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .price-settings {
+                background: #2d2d2d;
+            }
+            
+            .price-group input {
+                background: #333;
+                border-color: #444;
+                color: #f5f5f5;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <h1>Community Dinners</h1>
+        <div class="nav-links">
+            <a href="index.html">Current Dinner</a>
+            <a href="next-week.html">Next Week</a>
+            <a href="previous-dinners.html">Previous Dinners</a>
+            <a href="admin.html" class="active">Admin</a>
+            <a href="about.html">About</a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="price-settings">
+            <h2>Recommended Donation Settings</h2>
+            <p>Set the recommended donation amounts for different age groups:</p>
+            
+            <div class="price-group">
+                <label for="adultPrice">Adults (18+)</label>
+                <input type="number" id="adultPrice" min="0" step="0.5">
+            </div>
+            
+            <div class="price-group">
+                <label for="teenPrice">Teens (13-17)</label>
+                <input type="number" id="teenPrice" min="0" step="0.5">
+            </div>
+            
+            <div class="price-group">
+                <label for="childPrice">Children (5-12)</label>
+                <input type="number" id="childPrice" min="0" step="0.5">
+            </div>
+            
+            <div class="price-group">
+                <label for="underFivePrice">Under 5</label>
+                <input type="number" id="underFivePrice" min="0" step="0.5" disabled value="0">
+                <small>(Always free)</small>
+            </div>
+            
+            <button onclick="savePrices()">Save Changes</button>
+
+            <div class="archive-settings">
+                <h3>Automatic Archiving</h3>
+                <p>Current dinners are automatically archived at 8:00 PM every Saturday.</p>
+                <p>Next archive time: <span id="nextArchive"></span></p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Load saved prices
+        async function loadPrices() {
+            try {
+                const response = await fetch('api.php?action=get_settings');
+                const settings = await response.json();
+                document.getElementById('adultPrice').value = settings.prices.adult;
+                document.getElementById('teenPrice').value = settings.prices.teen;
+                document.getElementById('childPrice').value = settings.prices.child;
+            } catch (error) {
+                console.error('Failed to load prices:', error);
+                alert('Failed to load prices. Please refresh the page.');
+            }
+        }
+
+        // Save price changes
+        async function savePrices() {
+            try {
+                const response = await fetch('api.php?action=get_settings');
+                const settings = await response.json();
+                
+                settings.prices = {
+                    adult: parseFloat(document.getElementById('adultPrice').value),
+                    teen: parseFloat(document.getElementById('teenPrice').value),
+                    child: parseFloat(document.getElementById('childPrice').value),
+                    underFive: 0
+                };
+
+                const saveResponse = await fetch('api.php?action=update_settings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(settings)
+                });
+
+                if (saveResponse.ok) {
+                    alert('Prices updated successfully!');
+                } else {
+                    throw new Error('Failed to update prices');
+                }
+            } catch (error) {
+                console.error('Failed to save prices:', error);
+                alert('Failed to save prices. Please try again.');
+            }
+        }
+
+        // Calculate and display next archive time
+        function updateNextArchiveTime() {
+            const now = new Date();
+            const nextSaturday = new Date(now);
+            nextSaturday.setDate(now.getDate() + (6 - now.getDay()));
+            nextSaturday.setHours(20, 0, 0, 0);
+            
+            if (now > nextSaturday) {
+                nextSaturday.setDate(nextSaturday.getDate() + 7);
+            }
+            
+            document.getElementById('nextArchive').textContent = 
+                nextSaturday.toLocaleString('en-US', { 
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric'
+                });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPrices();
+            updateNextArchiveTime();
+        });
+    </script>
+</body>
+</html>

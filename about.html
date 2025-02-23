@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4a90e2">
+    <title>About - Community Dinners</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .about-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 2rem auto;
+            color: #000000;
+        }
+
+        .about-section {
+            margin-bottom: 2rem;
+            color: #000000;
+            min-height: 200px;
+        }
+
+        .edit-button {
+            float: right;
+            font-size: 0.9rem;
+        }
+
+        .about-section h3 {
+            margin-top: 1.5rem;
+            clear: both;
+        }
+
+        .about-section ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: #000000;
+        }
+
+        .about-section li {
+            margin-bottom: 0.5rem;
+            color: #000000;
+        }
+
+        @media (max-width: 768px) {
+            .about-content {
+                padding: 1rem;
+                margin: 1rem;
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .about-content {
+                background: #2d2d2d;
+                color: #ffffff;
+            }
+            .about-section,
+            .about-section ul,
+            .about-section li {
+                color: #ffffff;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <h1>Community Dinners</h1>
+        <div class="nav-links">
+            <a href="index.html">Current Dinner</a>
+            <a href="next-week.html">Next Week</a>
+            <a href="previous-dinners.html">Previous Dinners</a>
+            <a href="admin.html">Admin</a>
+            <a href="about.html" class="active">About</a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="about-content">
+            <button class="edit-button" onclick="toggleEdit()">Edit Content</button>
+            <div id="aboutText" class="about-section">
+                Click to add about content...
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const defaultContent = document.getElementById('aboutText').innerHTML;
+
+        // Load saved content
+        async function loadContent() {
+            try {
+                const response = await fetch('api.php?action=get_settings');
+                const settings = await response.json();
+                if (settings.aboutContent && typeof settings.aboutContent === 'string' && settings.aboutContent.trim() !== '') {
+                    document.getElementById('aboutText').innerHTML = settings.aboutContent;
+                }
+            } catch (error) {
+                console.error('Failed to load content:', error);
+            }
+        }
+
+        // Save content
+        async function saveContent() {
+            try {
+                const response = await fetch('api.php?action=get_settings');
+                const settings = await response.json();
+                const newContent = document.getElementById('aboutText').innerHTML;
+                
+                // Only update if content has changed
+                if (settings.aboutContent !== newContent) {
+                    settings.aboutContent = newContent;
+                    const saveResponse = await fetch('api.php?action=update_settings', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(settings)
+                    });
+
+                    if (saveResponse.ok) {
+                        alert('Content saved successfully!');
+                    } else {
+                        throw new Error('Failed to save content');
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to save content:', error);
+                alert('Failed to save changes. Please try again.');
+                // Restore default content on error
+                document.getElementById('aboutText').innerHTML = defaultContent;
+            }
+        }
+
+        // Toggle edit mode
+        function toggleEdit() {
+            const aboutText = document.getElementById('aboutText');
+            const editButton = document.querySelector('.edit-button');
+            
+            if (aboutText.contentEditable === 'true') {
+                aboutText.contentEditable = 'false';
+                editButton.textContent = 'Edit Content';
+                saveContent();
+            } else {
+                aboutText.contentEditable = 'true';
+                editButton.textContent = 'Save Changes';
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadContent);
+    </script>
+</body>
+</html>
