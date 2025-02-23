@@ -263,7 +263,7 @@ function updateRSVPList() {
                     Under 5: ${rsvp.underFive}
                 </span><br>
                 <span class="rsvp-donation">
-                    Recommended Donation: $${rsvp.donation}
+                    Recommended Donation if Not Contributing: $${rsvp.donation}
                 </span>
             </div>
             <button onclick="removeRSVP(${index})" class="remove-btn">Remove</button>
