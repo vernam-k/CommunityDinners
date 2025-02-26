@@ -137,7 +137,7 @@ function setupEditForm(field) {
     // Show edit form when edit button is clicked
     newEditBtn.addEventListener('click', function() {
         displayEl.style.display = 'none';
-        editBtn.style.display = 'none';
+        newEditBtn.style.display = 'none';
         formEl.style.display = 'block';
         inputEl.focus();
     });
@@ -178,6 +178,9 @@ function setupEditForm(field) {
                 displayEl.style.display = 'inline';
                 newEditBtn.style.display = 'inline';
                 formEl.style.display = 'none';
+                
+                // Re-setup forms to ensure all event handlers are properly attached
+                setupForms();
             } else {
                 showMessage('error', data.message);
             }
@@ -219,6 +222,8 @@ function setupMenuForm() {
             if (data.success) {
                 showMessage('success', data.message);
                 newMenuForm.reset();
+                // Re-setup forms to ensure all event handlers are properly attached
+                setupForms();
             } else {
                 showMessage('error', data.message);
             }
@@ -247,6 +252,8 @@ function setupMenuForm() {
                 .then(data => {
                     if (data.success) {
                         showMessage('success', data.message);
+                        // Re-setup forms to ensure all event handlers are properly attached
+                        setupForms();
                     } else {
                         showMessage('error', data.message);
                     }
@@ -283,6 +290,8 @@ function setupVolunteerButtons() {
             .then(data => {
                 if (data.success) {
                     showMessage('success', data.message);
+                    // Re-setup forms to ensure all event handlers are properly attached
+                    setupForms();
                 } else {
                     showMessage('error', data.message);
                 }
@@ -310,6 +319,8 @@ function setupVolunteerButtons() {
                 .then(data => {
                     if (data.success) {
                         showMessage('success', data.message);
+                        // Re-setup forms to ensure all event handlers are properly attached
+                        setupForms();
                     } else {
                         showMessage('error', data.message);
                     }
@@ -444,6 +455,8 @@ function setupRsvpForm() {
         .then(data => {
             if (data.success) {
                 showMessage('success', data.message);
+                // Re-setup forms to ensure all event handlers are properly attached
+                setupForms();
             } else {
                 showMessage('error', data.message);
             }
@@ -465,6 +478,8 @@ function setupRsvpForm() {
                 .then(data => {
                     if (data.success) {
                         showMessage('success', data.message);
+                        // Re-setup forms to ensure all event handlers are properly attached
+                        setupForms();
                     } else {
                         showMessage('error', data.message);
                     }
@@ -511,6 +526,8 @@ function setupNotesForm() {
             if (data.success) {
                 showMessage('success', data.message);
                 newNotesForm.reset();
+                // Re-setup forms to ensure all event handlers are properly attached
+                setupForms();
             } else {
                 showMessage('error', data.message);
             }
@@ -537,6 +554,8 @@ function setupNotesForm() {
                 .then(data => {
                     if (data.success) {
                         showMessage('success', data.message);
+                        // Re-setup forms to ensure all event handlers are properly attached
+                        setupForms();
                     } else {
                         showMessage('error', data.message);
                     }

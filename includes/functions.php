@@ -550,58 +550,77 @@ function generateNotesHTML($notes) {
 
 /**
  * Generate HTML for the dinner details section
- * 
+ *
  * @param array $dinner Dinner data
  * @return string HTML content
  */
 function generateDetailsHTML($dinner) {
     $date = new DateTime($dinner['date']);
+    $timeObj = DateTime::createFromFormat('H:i', $dinner['time']);
     
-    $html = '<div class="dinner-details">';
+    $html = '<h3>Dinner Details</h3>';
     
     // Date
-    $html .= '<div class="dinner-date">' . $date->format('l, F j, Y') . '</div>';
+    $html .= '<div class="dinner-date">';
+    $html .= '<strong>Date:</strong> ' . $date->format('l, F j, Y');
+    $html .= '</div>';
     
     // Theme
     $html .= '<div class="dinner-theme">';
-    if (empty($dinner['theme'])) {
-        $html .= '<span class="empty-theme">No theme set</span>';
-    } else {
-        $html .= '<span>' . htmlspecialchars($dinner['theme']) . '</span>';
-    }
+    $html .= '<strong>Theme:</strong> ';
+    $html .= '<span id="theme-display">';
+    $html .= empty($dinner['theme']) ? '<em>No theme set</em>' : htmlspecialchars($dinner['theme']);
+    $html .= '</span>';
     
-    // Edit button if user is logged in
+    // Edit button and form if user is logged in
     if (isset($_SESSION['user'])) {
-        $html .= '<button class="edit-theme">Edit Theme</button>';
+        $html .= '<button id="edit-theme-btn" class="edit-btn">Edit</button>';
+        
+        $html .= '<div id="theme-form" class="edit-form" style="display: none;">';
+        $html .= '<input type="text" id="theme-input" value="' . htmlspecialchars($dinner['theme']) . '">';
+        $html .= '<button id="save-theme-btn" class="save-btn">Save</button>';
+        $html .= '<button id="cancel-theme-btn" class="cancel-btn">Cancel</button>';
+        $html .= '</div>';
     }
     $html .= '</div>';
     
     // Location
     $html .= '<div class="dinner-location">';
-    if (empty($dinner['location'])) {
-        $html .= '<span class="empty-location">No location set</span>';
-    } else {
-        $html .= '<span>' . htmlspecialchars($dinner['location']) . '</span>';
-    }
+    $html .= '<strong>Location:</strong> ';
+    $html .= '<span id="location-display">';
+    $html .= empty($dinner['location']) ? '<em>No location set</em>' : htmlspecialchars($dinner['location']);
+    $html .= '</span>';
     
-    // Edit button if user is logged in
+    // Edit button and form if user is logged in
     if (isset($_SESSION['user'])) {
-        $html .= '<button class="edit-location">Edit Location</button>';
+        $html .= '<button id="edit-location-btn" class="edit-btn">Edit</button>';
+        
+        $html .= '<div id="location-form" class="edit-form" style="display: none;">';
+        $html .= '<input type="text" id="location-input" value="' . htmlspecialchars($dinner['location']) . '">';
+        $html .= '<button id="save-location-btn" class="save-btn">Save</button>';
+        $html .= '<button id="cancel-location-btn" class="cancel-btn">Cancel</button>';
+        $html .= '</div>';
     }
     $html .= '</div>';
     
     // Time
     $html .= '<div class="dinner-time">';
-    $timeObj = DateTime::createFromFormat('H:i', $dinner['time']);
-    $html .= '<span>' . $timeObj->format('g:i A') . '</span>';
+    $html .= '<strong>Time:</strong> ';
+    $html .= '<span id="time-display">';
+    $html .= $timeObj ? $timeObj->format('g:i A') : '6:00 PM';
+    $html .= '</span>';
     
-    // Edit button if user is logged in
+    // Edit button and form if user is logged in
     if (isset($_SESSION['user'])) {
-        $html .= '<button class="edit-time">Edit Time</button>';
+        $html .= '<button id="edit-time-btn" class="edit-btn">Edit</button>';
+        
+        $html .= '<div id="time-form" class="edit-form" style="display: none;">';
+        $html .= '<input type="time" id="time-input" value="' . htmlspecialchars($dinner['time']) . '">';
+        $html .= '<button id="save-time-btn" class="save-btn">Save</button>';
+        $html .= '<button id="cancel-time-btn" class="cancel-btn">Cancel</button>';
+        $html .= '</div>';
     }
     $html .= '</div>';
-    
-    $html .= '</div>'; // End dinner-details
     
     return $html;
 }
