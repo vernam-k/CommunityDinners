@@ -461,6 +461,7 @@ function generateRSVPHTML($rsvps) {
     $html .= '<li>Under 5: ' . $totalUnder5 . '</li>';
     $html .= '</ul>';
     $html .= '<p>Total Recommended Donation: $' . number_format($totalDonation, 2) . '</p>';
+    $html .= '<p class="donation-note"><em>Note: The recommended donation is only a suggestion for those who are unable to contribute in other ways, such as cooking, setup, cleanup, or providing food, drinks, or supplies.</em></p>';
     $html .= '</div>';
     
     // RSVP list

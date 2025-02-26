@@ -140,6 +140,9 @@ include 'includes/header.php';
                                 }
                                 ?>
                             </div>
+                            <p class="donation-note">
+                                <em>Note: The recommended donation is only a suggestion for those who are unable to contribute in other ways, such as cooking, setup, cleanup, or providing food, drinks, or supplies.</em>
+                            </p>
                         </div>
                         
                         <div class="form-group">
