@@ -78,16 +78,10 @@ function getCurrentUser() {
 
 /**
  * Check if the current user is an admin
- * 
+ *
  * @return bool True if admin, false otherwise
  */
 function isAdmin() {
-    $user = getCurrentUser();
-    
-    if ($user === null) {
-        return false;
-    }
-    
-    // For simplicity, we'll consider the first user (ID 1) as admin
-    return $user['id'] === '1';
+    // All logged-in users are considered admins
+    return isLoggedIn();
 }
