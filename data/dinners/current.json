@@ -1,0 +1,20 @@
+{
+  "id": "dinner_20250301",
+  "date": "2025-03-01",
+  "theme": "Community Gathering",
+  "location": "Community Center",
+  "time": "18:00",
+  "volunteers": {
+    "setup": [],
+    "cleanup": []
+  },
+  "menu": {
+    "main_dishes": [],
+    "sides": [],
+    "drinks": [],
+    "appetizers": [],
+    "supplies": []
+  },
+  "notes": [],
+  "rsvp": []
+}

@@ -1,0 +1,10 @@
+{
+  "dinner_day": 6,
+  "timezone": "America/Chicago",
+  "donation_amounts": {
+    "adults": 10,
+    "teens": 6,
+    "children": 3,
+    "under5": 0
+  }
+}
