@@ -457,6 +457,44 @@ switch ($action) {
         }
         break;
         
+    case 'update_about':
+        if (!isLoggedIn()) {
+            echo json_encode(['success' => false, 'message' => 'You must be logged in to update the About page']);
+            break;
+        }
+        
+        $content = $_POST['content'] ?? '';
+        $user = getCurrentUser();
+        
+        // Sanitize content but allow HTML tags for the WYSIWYG editor
+        // We're not using the sanitize() function here because it would strip HTML tags
+        
+        $aboutFile = DATA_PATH . '/about.json';
+        $aboutData = [];
+        
+        if (file_exists($aboutFile)) {
+            $aboutData = json_decode(file_get_contents($aboutFile), true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                $aboutData = [];
+            }
+        }
+        
+        $aboutData['content'] = $content;
+        $aboutData['last_updated'] = date('Y-m-d H:i:s');
+        $aboutData['last_updated_by'] = $user['name'];
+        
+        if (file_put_contents($aboutFile, json_encode($aboutData, JSON_PRETTY_PRINT), LOCK_EX) !== false) {
+            echo json_encode([
+                'success' => true,
+                'message' => 'About page updated successfully',
+                'last_updated' => $aboutData['last_updated'],
+                'last_updated_by' => $aboutData['last_updated_by']
+            ]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed to update About page']);
+        }
+        break;
+        
     default:
         echo json_encode(['error' => 'Invalid action']);
 }

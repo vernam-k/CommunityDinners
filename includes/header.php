@@ -24,6 +24,7 @@ header("Pragma: no-cache");
             <nav>
                 <ul>
                     <li><a href="index.php">Home</a></li>
+                    <li><a href="about.php">About</a></li>
                     <li><a href="archive.php">Archives</a></li>
                     <?php if (isAdmin()): ?>
                     <li><a href="admin.php">Admin</a></li>
